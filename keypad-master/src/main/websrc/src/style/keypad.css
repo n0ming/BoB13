@@ -1,0 +1,98 @@
+/* src/style/keypad.css */
+
+.keypad-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.progress-indicator {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.dot {
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+    border-radius: 50%;
+    background-color: #ccc;
+}
+
+.dot.filled {
+    background-color: #007bff;
+}
+
+.keypad-background {
+    display: inline-block;
+    background-color: #b0e0e6; /* Light blue background */
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.keypad-image {
+    cursor: pointer;
+    display: block;
+    width: 100%; /* 이미지 전체 너비 */
+    max-width: 240px; /* 최대 너비 제한 */
+    border-spacing: 2px; /* 테이블 셀 간의 간격 */
+}
+
+.table-style {
+    width: 100%;
+    table-layout: fixed;
+    background-color: #0071AE28;
+}
+
+.td-style {
+    margin: 0;
+    padding: 0;
+    border: 1px solid #333; /* 버튼 간의 구분선 */
+}
+
+.button-style {
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    border-radius: 0;
+    position: relative;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.number-style {
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: #333; /* 번호 색상 */
+}
+
+.input-group-style {
+    padding: 50px;
+    text-align: center;
+}
+
+.input-char-style {
+    display: inline-block;
+    width: 23px;
+    height: 23px;
+    background-color: #e5e5e5;
+    border-radius: 50%;
+    margin: 8px;
+}
+
+.input-char-style.active {
+    background-color: #2454c8;
+}
