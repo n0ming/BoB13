@@ -12,7 +12,7 @@
 
 using namespace std;
 int channel;
-// Mac 구조체 정의 및 비교 연산자 추가
+
 struct Mac {
     uint8_t mac[6];
 
@@ -24,8 +24,7 @@ struct Mac {
 void print_packet(const u_char* packet, int length) {
     cout << "Packet length: " << length << " bytes" << endl;
     for (int i = 0; i < length; i++) {
-        // Print each byte in hexadecimal
-        if (i % 16 == 0) cout << endl; // New line every 16 bytes
+        if (i % 16 == 0) cout << endl; 
         cout << hex << setw(2) << setfill('0') << (int)packet[i] << " ";
     }
     cout << dec << endl << endl; // Reset to decimal
