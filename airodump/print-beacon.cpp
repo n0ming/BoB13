@@ -19,7 +19,15 @@ void usage(){
     printf("syntax: beacon <interface>\n");
     printf("sample: beacon mon0\n");
 }
-
+void print_packet(const u_char* packet, int length) {
+    cout << "Packet length: " << length << " bytes" << endl;
+    for (int i = 0; i < length; i++) {
+        // Print each byte in hexadecimal
+        if (i % 16 == 0) cout << endl; // New line every 16 bytes
+        cout << hex << setw(2) << setfill('0') << (int)packet[i] << " ";
+    }
+    cout << dec << endl << endl; // Reset to decimal
+}
 struct data {
     u_int8_t data[200];
 };
@@ -110,6 +118,8 @@ int main(int argc, char* argv[]){
         	int res = pcap_next_ex(pcap, &header, &packet);
         	if (res == 0) continue;
 
+		print_packet(packet, header->len);
+		
 		struct rtapdata* rtap = (struct rtapdata*)packet;
 		struct beacon* beacon = (struct beacon*)(packet+(rtap->tx_attenuation));
 		if(beacon->subtype == Beacon) {
