@@ -8,6 +8,8 @@
 #include <cstring> // For memcpy
 #include <cstdlib>
 
+//[gilgil comment] Camel Case: 대문자와 소문자를 같이 써서 변수명을 지정하는 방법 >>c++
+//[gilgil comment]snake_case: 전부다 소문자 >> c 
 #define Beacon 128 //define: int (0x80=128)
 
 using namespace std;
@@ -33,7 +35,8 @@ bool parse(Param* param, int argc, char* argv[]) {
     return true;
 }
 
-struct Mac {
+//[gilgil comment]struct 얼라이먼트 있기때문에 strcut에서는 1바이트로 정의해라  pragama pack(push, 1) pragama pack(pop) 얼라이먼트 크기는 고정이되도록해야함 그래야지 다른사람이 가져올때 안바뀜
+struct Mac { 
     uint8_t mac[6];
 
     // operator< 정의 (std::map에서 사용 가능하도록)
@@ -97,7 +100,7 @@ const u_char* tag(const u_char* location, const Mac& bssid, int power) {
     }
 
     if (len > 0 && bssid_map.find(bssid) != bssid_map.end()) {
-            bssid_map[bssid].beacon++;
+            bssid_map[bssid].beacon++; //0.1s로 해도될듯 싶음 
 	    bssid_map[bssid].power = power;
     } else {
             airodump new_entry = {};
