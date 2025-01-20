@@ -114,7 +114,7 @@ const u_char* tag(const u_char* location, const Mac& bssid, int power) {
 // 맵 데이터 출력
 void UpdateBeaconMsg() {
     system("clear");
-    cout << "BSSID              PWR  Beacons  ESSID" << endl;
+    cout << "BSSID              PWR  Beacons  CH  ESSID" << endl;
     for (const auto& entry : bssid_map) {
         const Mac& mac = entry.first;
         const airodump& data = entry.second;
@@ -122,8 +122,8 @@ void UpdateBeaconMsg() {
         cout << mac_to_string(mac) << "  ";
         cout << setw(4) << data.power << "  ";
         cout << setw(7) << data.beacon << "  ";
-        cout << data.ssid<< endl ;
-	//cout << setw(2) << channel <<"  " << "\n";
+	cout << setw(2) << data.channel <<"  ";
+	cout << data.ssid << "\n";
     }
 }
 
