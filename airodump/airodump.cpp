@@ -13,32 +13,6 @@
 using namespace std;
 int channel;
 
-struct Mac {
-    uint8_t mac[6];
-
-    // operator< 정의 (std::map에서 사용 가능하도록)
-    bool operator<(const Mac& other) const {
-        return memcmp(mac, other.mac, 6) < 0;
-    }
-};
-void print_packet(const u_char* packet, int length) {
-    cout << "Packet length: " << length << " bytes" << endl;
-    for (int i = 0; i < length; i++) {
-        if (i % 16 == 0) cout << endl; 
-        cout << hex << setw(2) << setfill('0') << (int)packet[i] << " ";
-    }
-    cout << dec << endl << endl; // Reset to decimal
-}
-struct airodump {
-    uint8_t bssid[6];
-    string ssid;
-    int beacon;
-    int power;
-    int channel;
-};
-
-map<Mac, airodump> bssid_map;
-
 void usage() {
     printf("syntax: beacon <interface>\n");
     printf("sample: beacon mon0\n");
@@ -59,6 +33,25 @@ bool parse(Param* param, int argc, char* argv[]) {
     return true;
 }
 
+struct Mac {
+    uint8_t mac[6];
+
+    // operator< 정의 (std::map에서 사용 가능하도록)
+    bool operator<(const Mac& other) const {
+        return memcmp(mac, other.mac, 6) < 0;
+    }
+};
+
+struct airodump {
+    uint8_t bssid[6];
+    string ssid;
+    int beacon;
+    int power;
+    int channel;
+};
+
+map<Mac, airodump> bssid_map;
+
 struct rtap_header {
     uint8_t version;
     uint8_t pad;
@@ -72,6 +65,15 @@ struct beacon {
     struct Mac macs[3];
     uint16_t Sequence_Num; // 2 bytes
 };
+
+void print_packet(const u_char* packet, int length) {
+    cout << "Packet length: " << length << " bytes" << endl;
+    for (int i = 0; i < length; i++) {
+        if (i % 16 == 0) cout << endl; 
+        cout << hex << setw(2) << setfill('0') << (int)packet[i] << " ";
+    }
+    cout << dec << endl << endl;
+}
 
 // BSSID를 문자열로 변환
 string mac_to_string(const Mac& mac) {
@@ -125,7 +127,7 @@ void UpdateBeaconMsg() {
     }
 }
 
-int antenna(uint32_t present, const u_char* fields) {
+int GetAntennaSignal(uint32_t present, const u_char* fields) { 
     int count = 0;
     //print_packet(fields, 20);
     if (present & (1 << 0)) count += 8; // MAC TSFT
@@ -165,7 +167,7 @@ int main(int argc, char* argv[]) {
 	uint32_t it_present = rtap_h->present;
 	int rtap_len = sizeof(struct rtap_header);
 
-	while (it_present & (1 << 31)) {
+	while (it_present & (1 << 31)) { //present 3개 더한 위치 값 구하기
             it_present = *(uint32_t*)(packet + rtap_len);
             rtap_len += sizeof(uint32_t);
         }
@@ -174,7 +176,7 @@ int main(int argc, char* argv[]) {
 	struct beacon* beacon_frame = (struct beacon*)(packet + (rtap_h->len));
         if (beacon_frame->subtype == Beacon) {
             const Mac& bssid = beacon_frame->macs[1];
-            int power = antenna(rtap_h->present, fields);
+            int power = GetAntennaSignal(rtap_h->present, fields);
 
         const u_char* wm_start = packet + (rtap_h->len) + sizeof(struct beacon) + 12;
         int remaining_length = header->caplen - (wm_start - packet);
